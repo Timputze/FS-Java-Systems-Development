@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Mäxchen {
 
-	public static void main(String[] args) {
+	public void rollDice() {
 
 //beginning of user input for amount of players
 		Scanner playerAmountInput = new Scanner(System.in);
