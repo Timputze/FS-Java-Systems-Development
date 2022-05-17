@@ -3,7 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.*;
 import java.util.Arrays;
 
-public class Mäxchen {
+public class MäxchenDiceRoll {
 
 	public void rollDice() {
 
