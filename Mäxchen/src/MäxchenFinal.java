@@ -1,5 +1,5 @@
 
-public class MäxchenFinal extends MäxchenDiceRoll {
+public class MäxchenFinal {
 	
 	public static void main(String[] args) {
 

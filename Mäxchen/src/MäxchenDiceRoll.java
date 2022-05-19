@@ -1,7 +1,5 @@
-import java.util.concurrent.ThreadLocalRandom;
-//taken from StackOverflow
+import java.util.Random;
 import java.util.*;
-import java.util.Arrays;
 
 public class MäxchenDiceRoll {
 
@@ -14,17 +12,28 @@ public class MäxchenDiceRoll {
 		    String playerAmount = playerAmountInput.nextLine();
 		    System.out.println("Amount of players are: " + playerAmount);
 				//end of user input for amount of players
-
-
-		int die1=ThreadLocalRandom.current().nextInt(1, 6 + 1); //random die 1
-		int die2=ThreadLocalRandom.current().nextInt(1, 6 + 1); //random die 2
-		int actualResult=0;
-
-Integer[] numbers = new Integer[] { die1, die2 }; //putting dice into array
-
-Arrays.sort(numbers, Collections.reverseOrder()); //sorting dice in descending order
-
-System.out.println("The dice return: " + Arrays.toString(numbers));
+Random ran = new Random();
+		    
+		int die1;
+		int die2;
+		
+		die1 = ran.nextInt(6)+1;
+		die2 = ran.nextInt(6)+1;
+		
+		System.out.println(die1 + " " +die2);
+		
+	int result;
+		
+if(die1>die2) {
+	result = (die1*10) + die2;
+	System.out.println("The result is: " + result);
+} else if(die2>die1) {
+	result = (die2*10) + die1;
+	System.out.println("The result is: " + result);
+} else if(die1==die2) {
+	result = (die1*10) + die2;
+	System.out.println("The result is: " + result);
+} 
 
 
 	}
