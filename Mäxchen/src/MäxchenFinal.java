@@ -13,5 +13,9 @@ public class MäxchenFinal extends MäxchenDiceRoll {
 	MäxchenDiceRoll o = new MäxchenDiceRoll();
 	o.Lie();
     	
+	if(o.Lie() != n.rollDice()) {
+		
+	}
+	
 	}
 }
