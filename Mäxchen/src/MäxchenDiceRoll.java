@@ -2,28 +2,12 @@ import java.util.*;
 
 public class MäxchenDiceRoll {
 	
+	public static int rollDice() {
 	
-	public int playerAmount() {
-		//beginning of user input for amount of players
-				Scanner playerAmountInput = new Scanner(System.in);
-				    System.out.println("Enter amount of players \n");
-
-				    int playerAmount = playerAmountInput.nextInt();
-				    System.out.println("Amount of players are: " + playerAmount + "\n");
-						//end of user input for amount of players
-					return playerAmount;
-				
-	}
-	
-	public int rollDice() {
-		
 		int result = 0;
-		
-		Random ran = new Random();
-				    
+		Random ran = new Random();			    
 				int die1;
 				int die2;
-				
 				die1 = ran.nextInt(6)+1;
 				die2 = ran.nextInt(6)+1;
 				
@@ -37,12 +21,10 @@ public class MäxchenDiceRoll {
 			result = (die1*10) + die2;
 			System.out.println("The result is: " + result + "\n");
 		}
-		
-		return result;
-			
+		return result;	
 	}
 
-	public int Lie() {
+	public static int Lie() {
 		
 				Scanner playerLie = new Scanner(System.in);
 				    System.out.println("Enter the result of the dice roll: ");
