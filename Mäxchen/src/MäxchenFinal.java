@@ -46,14 +46,37 @@ public class MäxchenFinal {
 public static void main(String[] args) {
 	
 	int x = rollDice();
+	String rolling;
 	
-	System.out.println("The dice thrown yield the result: " + x + "\nThis number will vanish in a bit so remember it well! \n");
+	Scanner sc = new Scanner(System.in);
+	System.out.println("Do you want to roll the dice? 'Y' for yes and 'N' for No. \n");
+	rolling = sc.nextLine();
+	
+	if (rolling.equals("Y")) {
+		System.out.println("The dice thrown yield the result: " + x + "\nThis number will vanish in a bit so remember it well! \n");
+	} else {
+		int sc3;
+		Scanner sc2 = new Scanner(System.in);
+		System.out.println("What's the new result then? \n");
+		sc3 = sc2.nextInt();
+		System.out.println("You have said it is: " + sc3);
+		System.out.println("Pass to the next player. \n");
+		Thread t = new Thread() {
+		     public void run() {             
+		         String[] args = { };
+		         MäxchenFinal.main(args);     
+		     }  
+		};  
+		t.start(); 
+	}
 	
 	Timer timer = new Timer();
 	timer.schedule(new TimerTask() { 
 
 	   public void run() {
-	       System.out.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
+		   for (int i = 0; i < 100000; i++) {
+	       System.out.println("\n");
+		   }
 	   }
 	},  10000);
 	
@@ -70,6 +93,13 @@ public static void main(String[] args) {
 	
 	if (guess.equals("Y")) {
 		System.out.println("Pass to the next player. \n");
+		Thread t = new Thread() {
+		     public void run() {             
+		         String[] args = { };
+		         MäxchenFinal.main(args);     
+		     }  
+		};  
+		t.start(); 
 	} else if (guess.equals("N") && x == playerLieAmount) {
 		System.out.println("The player was being honest! You lose and have to drink!" + "\n \n");
 	} else if (guess.equals("N") && x != playerLieAmount) {
@@ -79,5 +109,3 @@ public static void main(String[] args) {
 	
 }
 }
-
-
