@@ -1,6 +1,6 @@
 # FS-Java-Systems-Development
 # FS-Java-Systems-Development
-The game that was developed for this project is the famous German drinking game Mäxchen. In order to play the game, please run the myGUI file and make sure that you have at least a 13" screen in order to ensure the smooth functionality of the game.
+The game that was developed for this project is the famous German drinking game Mäxchen. 
 Mäxchen is a multiplayer dice game which is based on the concept of bluffing with the so called “losing punishment” of being obliged to drink. 
 To be more specific, whenever a player loses the round, they would have to have a drink or take a shot, indicating that the more rounds one player loses, the more they would have to drink. Once a player loses 10 rounds, they lose the game as they would have already taken 10 shots and would be too drunk to play (“the player has fainted”).
 In order to play the game, each player is provided with two fair dices which they will use throughout the entire game, as well as a dice cup which acts as a concealer so that other players cannot see each other’s combinations. For DrunkMäxchen, the game is programmed in a way that other players cannot view each other’s combinations (replicating the original procedure of the game).
@@ -10,7 +10,7 @@ Mäxchen has a specific combination order from highest to lowest, which determin
 Order of Combinations (highest to lowest): The highest roll in Mäxchen is 21, also referred to as Mia/Mäxchen when a player rolls this combination or claims that they have rolled this combination. Then the order in a decreasing manner is 66, 55, 44, 33, 22, 11, 65, 64, 63, 62, 61, 54, 53, 52, 51, 43, 42, 41, 32, 31 (lowest).
 As there is a strict decreasing order in the game, meaning that the chances of you getting a higher combination than the previous player is not usually high, there is a lot of room for bluffing/lying as well as doubting the claims of the player you are playing against. Therefore, you have a number of operations which you can choose to do when you receive a combination and also when your opponent declares and communicates to you their combination
 Game operations (Your turn): After pressing the “Shake” button and receiving a randomized combination, you can either press the Truth or Lie button. 
-By pressing the Truth button, you actually submit to your opponent the real or true combination which you received after executing the shake button. 
+By pressing the Truth button, you actually submit and display to your opponent the real or true combination which you received after executing the shake button. 
 By choosing to press the Lie button, you manually enter a fake combination which you falsefully claim that you achieved using the programmed pop-up window. The fake combination should naturally be any combination that is just higher than the combination which your opponent claims they received. This also allows you to even attempt to beat a Mäxchen (21) which is the highest combination in the game.
 Game operations (After opponents turn): Before carrying on with the game and with your turn, there are two further buttons which you can press: the Believe and the Doubt button. 
 The Believe button represents that you have trusted your opponent with the combination that they have claimed to received and thus the game carries on with your turn to shake and receive a combination.
@@ -21,3 +21,5 @@ End Turn button: The End Turn button is used and pressed after each player finis
 How a player wins in Mäxchen: Using the Drunkometers function in the game, the winning and losing player is determined. The purpose of the Drunkometers calculator in the game is to account for every time a player loses a round when playing the game of Mäxchen, where the Drunkometer increases by 10% for each round the player loses. 
 The first player to so to say “fill up” their Drunkometer, which occurs when a player loses 10 times (10*10% = 100%), loses the game of Mäxchen. 
 Have fun playing this exciting and exhilarating game and prove that you can make your friend faint first!
+
+Also it should be noted that there may be some issues with the GUI if your display is smaller than 13", this can be solved if you change the scaling on your display settings. The exectutable file to run the game is MyGUI.
