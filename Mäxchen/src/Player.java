@@ -1,221 +1,134 @@
+package src;
+/**
+ * The class Player holds all parameters and methods necessary to save information about the two playing users.
+ */
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.awt.event.*;
+public class Player {
 
-public class Player extends JFrame{
+    private int maxDrunkeness; //How drunk the players are allowed to be before the game finishes
+    private int perShotDrunkeness; //By how much the players drunkometers rise per Shot
 
-	private int width;
-	private int height;
-	private Container contentPane;
-	private JTextArea message;
-	private JButton b1;
-	private JButton b2;
-	private JButton b3;
-	private JButton b4;
-	private int playerID;
-	private int otherPlayer;
-	private int[] values;
-	private int maxTurns;
-	private int turnsMade;
-	private int myPoints;
-	private int enemyPoints;
-	private boolean buttonsEnabled;
-	
-	private ClientSideConnection csc;
-	
-	private static final long serialVersionUID = 1L;
-	
-	public Player(int w, int h) {
-		width = w;
-		height = h;
-		contentPane = this.getContentPane();
-		message = new JTextArea();
-		b1 = new JButton("1");
-		b2 = new JButton("2");
-		b3 = new JButton("3");
-		b4 = new JButton("4");
-		values = new int [4];
-		turnsMade = 0;
-		myPoints = 0;
-		enemyPoints = 0;
-	}
-	
-	public void setupGUI() {
-		this.setSize(width, height);
-		this.setTitle("Player "+ playerID +": Mäxchen");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		contentPane.setLayout(new GridLayout(1, 5));
-		contentPane.add(message);
-		message.setText("Click to roll a dice!");
-		message.setWrapStyleWord(true);
-		message.setLineWrap(true);
-		message.setEditable(false);
-		contentPane.add(b1);
-		contentPane.add(b2);
-		contentPane.add(b3); //remove
-		contentPane.add(b4); //remove
-		
-		if (playerID == 1) {
-			message.setText("You are Player 1 and go first!");
-			otherPlayer = 2;
-			buttonsEnabled = true;
-		} else {
-			message.setText("You are Player 2 and go after Player 1!");
-			otherPlayer = 1;
-			buttonsEnabled = false;
-			Thread t = new Thread(new Runnable() {
-				public void run() {
-				updateTurn();
-			}
-			});
-			t.start();
-		}
-		toggleButtons();
-		
-		this.setVisible(true);
-	} 
-	
-	public void connectToServer() {
-		csc = new ClientSideConnection();
-	}
-	
-	public void setUpButtons() {
-		ActionListener al = new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton b = (JButton) ae.getSource();
-				int bNum = Integer.parseInt(b.getText());
-				
-				message.setText("You rolled the dice! Awaiting response from player " + otherPlayer);
-				turnsMade++;
-				System.out.println("Turns made so far: " + turnsMade);
-				
-				buttonsEnabled = false;
-				toggleButtons();
-				
-				myPoints += values[bNum - 1];
-				System.out.println("My points: " + myPoints);
-				csc.sendButtonNum(bNum);
-				
-				if (playerID==2 && turnsMade == maxTurns) {
-					checkWinner();
-				} else {
-					Thread t = new Thread(new Runnable() {
-						public void run() {
-						updateTurn();
-						}
-					});
-					t.start();
-				}	
-			}
-		};
-		
-		b1.addActionListener(al);
-		b2.addActionListener(al);
-		b3.addActionListener(al); //remove
-		b4.addActionListener(al); //remove
-	}
-	
-	public void toggleButtons() {
-		b1.setEnabled(buttonsEnabled);
-		b2.setEnabled(buttonsEnabled);
-		b3.setEnabled(buttonsEnabled); //remove
- 		b4.setEnabled(buttonsEnabled); //remove
-		
-	}
-	
-	public void updateTurn() {
-		int n = csc.receiveButtonNum();
-		message.setText("Your opponnent clicked button " + n + ". Now it is your turn!");
-		enemyPoints += values[n-1];
-		System.out.println("Your opponent has " + enemyPoints + " points.");
-		if (playerID == 1 && turnsMade == maxTurns) {
-			checkWinner();
-		} else {
-			buttonsEnabled = true;
-			
-		}
-		toggleButtons();		
-	}
-	
-	private void checkWinner() { //edit for JPlane input later with lying functionality implemented
-		buttonsEnabled = false;
-		if (myPoints>enemyPoints) {
-			message.setText("You win! \n " + myPoints + "\n" + "You: " + myPoints + "\n" + "Opponent: " + enemyPoints);
-		} else if (myPoints<enemyPoints) {
-			message.setText("You lose! \n " + myPoints + "\n" + "You: " + myPoints + "\n" + "Opponent: " + enemyPoints);
-		} else {
-			message.setText("It's a tie! \n " + myPoints + "\n" + "You: " + myPoints + "\n" + "Opponent: " + enemyPoints);
-		}
-		csc.closeConnection();
-	}
-	
-	private class ClientSideConnection {
-		
-		private Socket socket;
-		private DataInputStream dataIn;
-		private DataOutputStream dataOut;
-		
-		public ClientSideConnection() {
-			System.out.println("----------Client---------");
-			try {
-				socket = new Socket("localhost", 51737);
-				dataIn = new DataInputStream(socket.getInputStream());
-				dataOut = new DataOutputStream(socket.getOutputStream());
-				playerID = dataIn.readInt();
-				System.out.println("Connected to server as Player " + playerID + ".");
-				maxTurns = dataIn.readInt() / 2;
-				values[0] = dataIn.readInt();
-				values[1] = dataIn.readInt();
-				values[2] = dataIn.readInt(); //remove
-				values[3] = dataIn.readInt(); //remove
-				System.out.println("Maximum turns are:" + " " + maxTurns);
-				System.out.println("Value 1 is:" + " " + values[0]);
-				System.out.println("Value 2 is:" + " " + values[1]);
-				System.out.println("Value 3 is:" + " " + values[2]); //remove
-				System.out.println("Value 4 is:" + " " + values[3]); //remove
-			} catch (IOException e) {
-				System.out.println("IOException from ClientSideConnection constructor :(");
-			}
-		}
-		
-		public void sendButtonNum(int n) {
-			try {
-			dataOut.writeInt(n);
-			dataOut.flush();
-			} catch (IOException e) {
-				System.out.println("IOException from sendButtonNum() CSC");
-			}
-		}
-		
-		public int receiveButtonNum() {
-			int n = -1;
-			try {
-				n = dataIn.readInt();
-				System.out.println("Player " + otherPlayer +" rolled the dice.");
-			} catch (IOException e) {
-				System.out.println("IOException from receiveButtonNum() csc");
-			}
-			return n;
-		}
-		public void closeConnection() {
-			try {
-				socket.close();
-				System.out.println("Connection ended.");
-			} catch (IOException e) {
-				System.out.println("IOException from closeConnection() csc");
-			}
-		}
-	}
-	
-	public static void main(String[] args){
-		Player p = new Player(1200, 200);
-		p.connectToServer();
-		p.setupGUI();
-		p.setUpButtons();
-		
-	}
-	
+    private int drunkometer = 0; //The current value of the players drunkometer. The drunkometer is a progress bar shown to the user over the UI (see Class GUI)
+
+    private boolean isCurrentlyPlaying = false;
+
+    private MaexchenDiceRoll faceValue; //The Dice Value a player actually rolled after pressing the shake button
+
+    /**
+     *  Getter method
+     * @return faceValue = The Dice Value a player actually rolled after pressing the shake button
+     */
+    public MaexchenDiceRoll getFaceValue() {
+        return faceValue;
+    }
+
+    /**
+     *  Rolls a new dice value of the class MäxchenDiceROll according to the Mäxchen rules
+     * @return faceValue
+     * See  class MaexchenDiceRoll
+     */
+    public MaexchenDiceRoll rollDiceRoll() {
+        return this.faceValue = new MaexchenDiceRoll();
+    } //
+
+    private MaexchenDiceRoll toldValue; //The Dice Value a player said he rolled (can be the truth or a lie)
+
+    /**
+     *  Getter method
+     * @return faceValue = The Dice Value a player said he rolled (can be the truth or a lie)
+     */
+    public MaexchenDiceRoll getToldValue() {
+        return toldValue;
+    }
+
+    /**
+     *  A setter method. Saves a toldValue.
+     *
+     */
+    public void setToldValue(int toldValue) {
+        this.toldValue = new MaexchenDiceRoll(toldValue);
+    } //A told value also follows the limits of the Mäxchen rules, which is why it is a MaexchenDiceRoll object.
+
+    /**
+     *  A setter method. If the player decides to tell the truth, the faceValue automatically is equal to the toldValue
+     */
+    public void tellTheTruth(){
+        this.toldValue = this.faceValue;
+    }
+
+    /**
+     *  A setter method. Resets the faceValue and the ToldValue for the start of a new round. A new round is started when one of the players loses.
+     */
+    public void resetValues(){
+        System.out.println("VALUES RESET");
+        this.faceValue = new MaexchenDiceRoll(0);
+        this.toldValue = new MaexchenDiceRoll(0);
+    }
+
+    /**
+     *  A setter method. When the believe button is pressed, the previous value inside the toldValue box gets saved as a faceValue as well
+     */
+    public void believe(){
+        this.faceValue = this.toldValue;
+    }
+
+    /**
+     *  The constructor of the class.
+     * @param maxDrunkeness
+     * @param perShotDrunkeness
+     */
+    public Player(int maxDrunkeness, int perShotDrunkeness) { //The constructor of the player class.
+        this.maxDrunkeness = maxDrunkeness;
+        this.perShotDrunkeness = perShotDrunkeness;
+        this.toldValue = new MaexchenDiceRoll(0);
+    }
+
+    public boolean isCurrentlyPlaying() {
+        return isCurrentlyPlaying;
+    }
+
+    /**
+     *  If a player´s drunkometer is higher than what is maximally possible for a player to be, then this player is will "faint" and has lost the game.
+     * @return boolean true or false = Answers the question whether the drunkometer is full.
+     */
+    public boolean isDrunk(){
+        return drunkometer >= maxDrunkeness;
+    }
+
+    /**
+     *  Used to check whether the Inactive (previous) player was lying. If their toldValue deviated from their rolled MaexchenDiceRoll (FaceValue) then they obviously did and a true boolean is returned.
+     * @return boolean true
+     */
+    public boolean isLying(){
+        return !(this.toldValue == this.faceValue);
+    }
+
+    /**
+     *  A setter method. Sets the isCurrentlyPlaying parameter to false when called.
+     */
+    public void endTurn() {
+        this.isCurrentlyPlaying = false;
+    }
+
+    /**
+     *  A setter method. Sets the isCurrentlyPlaying parameter to true when called.
+     */
+    public void myTurn() {
+        this.isCurrentlyPlaying = true;
+    }
+
+    /**
+     *  A getter method.
+     * @return the drunkometer value of the player = how full it is
+     */
+    public int getDrunkometer() {
+        return drunkometer;
+    }
+
+    /**
+     *  When a player drinks, their current drunkometer rises by a shot (perShotDrunkness parameter)
+     */
+    public void drink(){
+        this.drunkometer += perShotDrunkeness;
+    }
 }

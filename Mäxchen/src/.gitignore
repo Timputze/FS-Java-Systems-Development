@@ -1,10 +1,14 @@
-/bin/
 /GameEndAlert.class
 /GamePhase.class
 /GameService$DoubtResult.class
 /GameService.class
 /Lier.class
 /MaexchenDiceRoll.class
+/MyGUI.class
+/Player.class
+/RulesWindow.class
+/ShakeResult.class
+/ShotRoller.class
 /MyGUI$1.class
 /MyGUI$2.class
 /MyGUI$3.class
@@ -14,8 +18,3 @@
 /MyGUI$7.class
 /MyGUI$8.class
 /MyGUI$9.class
-/MyGUI.class
-/Player.class
-/RulesWindow.class
-/ShakeResult.class
-/ShotRoller.class
